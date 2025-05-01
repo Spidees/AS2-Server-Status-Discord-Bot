@@ -32,3 +32,17 @@
 | Factorio                  | ❌           | Offers HTTP API, not A2S                |
 | SCP: Secret Laboratory    | ⚠️           | Custom query, may vary by version       |
 | Terraria                  | ⚠️           | Depends on server setup                 |
+
+
+
+
+---
+
+## Support Me 
+ 
+🙌 If you enjoy my work and want to support me, you can do so on:  
+
+[![Ko-fi Badge](https://img.shields.io/badge/Support%20me%20on-Ko--fi-ff5e5b?style=flat&logo=ko-fi&logoColor=white)](https://ko-fi.com/playhub)  
+[![PayPal Badge](https://img.shields.io/badge/Donate-PayPal-0070ba?style=flat&logo=paypal&logoColor=white)](https://paypal.me/spidees)
+
+Thank you for your support! ❤️
