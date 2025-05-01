@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 # 📥 Načtení proměnných z .env
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
+SERVER_TYPE = os.getenv("SERVER_TYPE")
 SERVER_IP = os.getenv("SERVER_IP")
 SERVER_PORT = int(os.getenv("SERVER_PORT"))
 
@@ -18,7 +19,7 @@ async def update_status():
     while not client.is_closed():
         try:
             result = gamedig.query(
-                type='vrising',
+                type=SERVER_TYPE,
                 host=SERVER_IP,
                 port=SERVER_PORT
             )
