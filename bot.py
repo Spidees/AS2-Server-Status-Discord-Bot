@@ -48,7 +48,7 @@ def query_server(ip, port, timeout=3):
 
         return name, players, max_players
 
-class VRisingBot(discord.Client):
+class AS2Bot(discord.Client):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.message = None
@@ -84,5 +84,5 @@ class VRisingBot(discord.Client):
 
             await asyncio.sleep(60)
 
-client = VRisingBot(intents=intents)
+client = AS2Bot(intents=intents)
 client.run(TOKEN)
