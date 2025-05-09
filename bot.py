@@ -1,3 +1,4 @@
+
 import socket
 import struct
 import os
@@ -22,7 +23,6 @@ def query_server(ip, port, timeout=3):
         data, _ = s.recvfrom(4096)
 
         if data[4] == 0x41:
-            # challenge request
             challenge = struct.unpack('<i', data[5:9])[0]
             full_request = A2S_INFO_HEADER + struct.pack('<i', challenge)
             s.sendto(full_request, (ip, port))
@@ -31,7 +31,7 @@ def query_server(ip, port, timeout=3):
         if data[4] != 0x49:
             raise ValueError("Neplatná A2S odpověď (nezačíná 0x49)")
 
-        i = 6  # po hlavičce
+        i = 6
 
         def read_string(data, offset):
             end = data.index(0, offset)
@@ -41,14 +41,14 @@ def query_server(ip, port, timeout=3):
         map_name, i = read_string(data, i)
         folder, i = read_string(data, i)
         game, i = read_string(data, i)
-        i += 2  # skip game ID (2 bajty)
+        i += 2
 
         players = data[i]
         max_players = data[i + 1]
 
         return name, players, max_players
 
-class AS2Bot(discord.Client):
+class StatusBot(discord.Client):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.message = None
@@ -57,7 +57,7 @@ class AS2Bot(discord.Client):
         asyncio.create_task(self.update_status_and_embed())
 
     async def on_ready(self):
-        print(f"✅ Přihlášen jako {self.user.name}")
+        print(f"Přihlášen jako {self.user.name}")
 
     async def update_status_and_embed(self):
         await self.wait_until_ready()
@@ -70,19 +70,22 @@ class AS2Bot(discord.Client):
                 embed = discord.Embed(title=name, description=f"**{players} / {max_players} hráčů online**", color=0x00ff00)
             except Exception as e:
                 activity = discord.Game(name="Server offline")
-                embed = discord.Embed(title="Server offline", description="❌ Nepodařilo se připojit", color=0xff0000)
+                embed = discord.Embed(title="Server offline", description="Nepodařilo se připojit", color=0xff0000)
 
-            await self.change_presence(status=discord.Status.online, activity=activity)
+            try:
+                await self.change_presence(status=discord.Status.online, activity=activity)
+            except Exception as e:
+                print(f"Nelze změnit status: {e}")
 
             try:
                 if self.message and self.message.channel == channel:
                     await self.message.edit(embed=embed)
                 else:
                     self.message = await channel.send(embed=embed)
-            except:
-                pass
+            except Exception as e:
+                print(f"Chyba při odesílání embed zprávy: {e}")
 
             await asyncio.sleep(60)
 
-client = AS2Bot(intents=intents)
+client = StatusBot(intents=intents)
 client.run(TOKEN)
